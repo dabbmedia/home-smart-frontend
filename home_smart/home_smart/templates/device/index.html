@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Devices{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+  <div id="view-index">
+    
+    <br>
+    {% for device in devices %}
+      <section class="device">
+        <h1><a href="{{ url_for('device.update', id=device['id']) }}">{{ device['name'] }}</a></h1>
+        <input type="hidden" name="id" id="id" value="{{ device['id'] }}">
+        
+        <p class="device-description">{{ device['description'] }}</p>
+        
+        <div class="device-name">{{ device['name'] }}</div>
+        
+        <div class="device-address">{{ device['address'] }}</div>
+                
+        <div class="device-created">Created on {{ device['created'].strftime('%Y-%m-%d') }}</div>
+        
+        {% if not loop.last %}
+        <hr>
+        {% endif %}
+        <div id="result"></div>
+      </section>
+    {% endfor %}
+    <section class="device">
+      <div class="action-add"><a href="{{ url_for('device.create') }}">+</a></div>
+      <div class="action-label"><a href="{{ url_for('device.create') }}">Add</a></div>
+    </section>
+  </div>
+{% endblock %}

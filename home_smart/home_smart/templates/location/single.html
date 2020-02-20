@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1><a href="{{ url_for('location.index') }}">Locations</a>&nbsp;&gt;&nbsp;{{ location['name'] }}</h1>
+{% endblock %}
+
+{% block content %}
+  <div class="location-details">
+    <p name="description" id="description">{{ request.form['description'] or location['description'] }}</p>
+    <a href="{{ url_for('location.update', id=location['id']) }}" title="Edit Location">Edit</a>
+  </div>
+  <div class="location-data">
+    <h2>Floors</h2>
+    <ul class="location-floors">
+      {% for floor in location['floors'] %}
+      <li data-id="{{ floor['id'] }}">
+        <p>{{ floor['name'] }}</p>
+        <h3>Rooms</h3>
+        <ul class="floor-rooms">
+          {% for room in floor['rooms'] %}
+          <li data-id="{{ room['id'] }}">
+            <p>{{ room['name'] }}</p>
+            <h4>Devices</h4>
+            <ul class="room-devices">
+              {% for device in room['devices'] %}
+              <li data-id="{{ device['id'] }}">
+                {{ device['name'] }}
+                <h5>Sensors</h5>
+                <ul class="device-sensors">
+                {% for sensor in device['sensors'] %}
+                <li><a href="{{ url_for('sensor.single', id=sensor['id']) }}">{{ sensor['name'] }}</a></li>
+                {% endfor %}
+                </ul>
+                <h5>Actuators</h5>
+                <ul class="device-actuators">
+                {% for actuator in device['actuators'] %}
+                <li>{{ actuator['name'] }}</li>
+                {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

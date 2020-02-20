@@ -1,0 +1,18 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - Home Smart</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>

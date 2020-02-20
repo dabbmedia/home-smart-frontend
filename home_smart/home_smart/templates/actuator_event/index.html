@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Actuator Events{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+  <div id="view-index">
+    
+    <br>
+    {% for actuator_event in actuator_events %}
+      <section class="actuator_event">
+        <h1><a href="{{ url_for('actuator_event.update', id=actuator_event['id']) }}">{{ actuator_event['name'] }}</a></h1>
+        <input type="hidden" name="id" id="id" value="{{ actuator_event['id'] }}">
+        
+        <p class="actuator_event-description">{{ actuator_event['description'] }}</p>
+        
+        <div class="actuator_event-name">{{ actuator_event['name'] }}</div>
+                
+        <div class="actuator_event-created">Created on {{ actuator_event['created'].strftime('%Y-%m-%d') }}</div>
+        
+        {% if not loop.last %}
+        <hr>
+        {% endif %}
+        <div id="result"></div>
+      </section>
+    {% endfor %}
+    <section class="actuator_event">
+      <div class="action-add"><a href="{{ url_for('actuator_event.create') }}">+</a></div>
+      <div class="action-label"><a href="{{ url_for('actuator_event.create') }}">Add</a></div>
+    </section>
+  </div>
+{% endblock %}

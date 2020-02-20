@@ -1,0 +1,98 @@
+# https://hub.docker.com/_/postgres
+# https://hub.docker.com/_/debian
+version: '3'
+
+networks:
+  home_smart-network:
+    driver: bridge
+
+services:
+  home_smart-db:
+    image: postgres:11
+    container_name: home_smart-postgres11
+    environment:
+      POSTGRES_DB: home_smart
+      POSTGRES_USER: home_smart
+      POSTGRES_PASSWORD: home_smart
+    volumes:
+      - db_data_home_smart:/var/lib/postgresql/data
+      - ./home_smart/home_smart/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./home_smart/data:/var/www/html/data
+    # command: ["localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8"]
+    ports:
+      - "5432:5432"
+    networks:
+      - home_smart-network
+    restart: always
+
+  # home_smart-debian:
+  #   container_name: home_smart-debian10
+  #   build: ./docker-build/debian/
+  #   volumes:
+  #     # - ./home_smart:/var/www/home_smart:rw
+  #     - ./home_smart:/usr/local/apache2/htdocs:rw
+  #     # - ./app/start_flask.sh:/var/www/html/start_flask.sh
+  #   # devices:
+  #   #   - "/dev/blah:/dev/video0"
+  #   # command: ["ping", "localhost"]
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   networks:
+  #     - home_smart-network
+  #   links:
+  #     - home_smart-db
+  #   restart: always
+
+  # home_smart-nginx:
+  #   container_name: home_smart-nginx1_16
+  #   build: ./docker-build/nginx/
+  #   volumes:
+  #     - ./home_smart:/usr/share/nginx/html/:rw
+  #     - ./docker-build/nginx/start_uwsgi.sh:/usr/share/start_uwsgi.sh
+  #     # - ./docker-build/nginx/uwsgi.ini:/usr/share/uwsgi.ini
+  #     # - ./home_smart/home_smart/index.html:/usr/share/nginx/html/index.html:rw
+  #   command: ["/bin/sh", "/usr/share/start_uwsgi.sh"]
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   networks:
+  #     - home_smart-network
+  #   # links:
+  #   #   - home_smart-db
+  #   restart: always
+
+  # home_smart-python:
+  #   container_name: home_smart_3.7-buster
+  #   build: ./docker-build/python/
+  #   volumes:
+  #     - ./home_smart:/var/www/home_smart:rw
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - "80:5000"
+  #   networks:
+  #     - home_smart-network
+  #   links:
+  #     - home_smart-db
+  #   restart: always
+
+  # home_smart-httpd:
+  #   container_name: home_smart_httpd
+  #   build: ./docker-build/httpd/
+  #   volumes:
+  #     - ../app:/var/www/html:rw
+  #   ports:
+  #     - "8080:80"
+  #   networks:
+  #     - home_smart-network
+  #   links:
+  #     - home_smart-db
+  #   restart: always
+
+volumes:
+    db_data_home_smart:

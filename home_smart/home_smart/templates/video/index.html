@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Cameras{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+  <div id="view-index">
+    
+    {% for camera in cameras %}
+    <section class="camera">
+      <div class="video-frame"><img src="http://{{ camera['address'] }}/video-feed"></div>
+      
+      <h1>{{ camera['device_name'] }}</h1>
+      <input type="hidden" name="device_id" id="device_id" value="{{ camera['device_id'] }}">
+      
+      <p class="camera-name">{{ camera['sensor_name'] }}</p>
+      <input type="hidden" name="sensor_id" id="sensor_id" value="{{ camera['sensor_id'] }}">
+      
+      <p class="camera-description">{{ camera['sensor_description'] }}</p>
+      
+      <div id="result"></div>
+    </section>
+    {% endfor %}
+  </div>
+{% endblock %}

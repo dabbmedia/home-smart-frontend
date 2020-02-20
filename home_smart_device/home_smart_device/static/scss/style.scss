@@ -1,0 +1,11 @@
+/*Install sass on ubuntu*/
+/*sudo apt install ruby-sass*/
+/*Usage:*/
+/* sass --style compressed home_smart_device/home_smart_device/static/scss/style.scss:home_smart_device/home_smart_device/static/style.css */
+/*or*/
+/*sass --watch :compressed home_smart_device/home_smart_device/static/scss/style.scss:home_smart_device/home_smart_device/static/style.css */
+@import '_variables';
+@import '_base';
+@import '_nav';
+@import '_content';
+@import '_home_smart_device';

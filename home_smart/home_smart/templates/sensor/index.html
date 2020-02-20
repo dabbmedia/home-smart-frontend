@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Sensors{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+  <div id="view-index">
+    
+    <br>
+    {% for sensor in sensors %}
+      <section class="sensor">
+        <h1><a href="{{ url_for('sensor.update', id=sensor['id']) }}">{{ sensor['name'] }}</a></h1>
+        <input type="hidden" name="id" id="id" value="{{ sensor['id'] }}">
+        
+        <p class="sensor-description">{{ sensor['description'] }}</p>
+        
+        <div class="sensor-name">{{ sensor['name'] }}</div>
+                
+        <div class="sensor-created">Created on {{ sensor['created'].strftime('%Y-%m-%d') }}</div>
+        
+        {% if not loop.last %}
+        <hr>
+        {% endif %}
+        <div id="result"></div>
+      </section>
+    {% endfor %}
+    <section class="sensor">
+      <div class="action-add"><a href="{{ url_for('sensor.create') }}">+</a></div>
+      <div class="action-label"><a href="{{ url_for('sensor.create') }}">Add</a></div>
+    </section>
+  </div>
+{% endblock %}

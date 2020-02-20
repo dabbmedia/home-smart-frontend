@@ -1,0 +1,26 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - Home Smart</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<nav>
+  <menu>
+    <menuitem><a href="{{ url_for('video.index') }}">Cameras</a></menuitem>
+    <menuitem><a href="{{ url_for('index') }}">Locations</a></menuitem>
+  </menu>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  <script type=text/javascript src="{{ url_for('static', filename='js/lib/vue.js') }}"></script>
+  {% block content %}{% endblock %}
+</section>
+<script type=text/javascript src="{{ url_for('static', filename='js/app/location.js') }}"></script>

@@ -1,0 +1,45 @@
+html {
+    body {
+        /* Content */
+        .content {
+            padding: 0 1rem 1rem;
+            form { margin: 1em 0; display: flex; flex-direction: column; }
+
+            &:last-child { margin-bottom: 0; }
+
+            &  > header {
+                border-bottom: 1px solid lightgray;
+                display: flex;
+                align-items: flex-end;
+                
+                h1 { flex: auto; margin: 1rem 0 0.25rem 0; }
+            }
+
+            section {
+                display: inline-block;
+                max-width: 22%;
+                margin: 2rem 2%;
+
+                .action-add { font-size: 4rem; }
+                .action-label { text-align: center; }
+                .action-add a, .action-label a { text-decoration: none; }
+
+                span.value-degrees {
+                  font-size: 24px;
+                }
+                input#up, input#down {
+                  min-height: 32px;
+                }
+                input[type=text]#value {
+                  text-align: right; width: 45px; border-width: 0; font-size: 24px; color: black; background-color: transparent;
+                }
+                input[type=text]#min_value {
+                  width: 24px; border-width: 0; font-size: 14px; color: black; background-color: transparent;
+                }
+                input[type=text]#max_value {
+                  text-align: right; padding-left: 8px; width: 24px; border-width: 0; font-size: 14px; color: black; background-color: transparent;
+                }
+              }
+        }
+    }
+}

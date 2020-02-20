@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Networks{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+  <div id="view-index">
+    
+    <br>
+    {% for floor in floors %}
+      <section class="floor">
+        <h1><a href="{{ url_for('network.update', id=floor['id']) }}">{{ floor['name'] }}</a></h1>
+        <input type="hidden" name="id" id="id" value="{{ floor['id'] }}">
+        
+        <p class="floor-description">{{ floor['description'] }}</p>
+        
+        <div class="floor-name">{{ floor['name'] }}</div>
+                
+        <div class="floor-created">Created on {{ floor['created'].strftime('%Y-%m-%d') }}</div>
+        
+        {% if not loop.last %}
+        <hr>
+        {% endif %}
+        <div id="result"></div>
+      </section>
+    {% endfor %}
+    <section class="floor">
+      <div class="action-add"><a href="{{ url_for('network.create') }}">+</a></div>
+      <div class="action-label"><a href="{{ url_for('network.create') }}">Add</a></div>
+    </section>
+  </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1><a href="{{ url_for('actuator.index') }}">Actuators</a>&nbsp;&gt;&nbsp;{% block title %}Edit Actuator{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name" value="{{ request.form['name'] or actuator['name'] }}" required>
+    <label for="description">Description</label>
+    <textarea name="description" id="description">{{ request.form['description'] or actuator['description'] }}</textarea>
+    <input type="submit" value="Update">
+  </form>
+  <form action="{{ url_for('actuator.delete', id=actuator['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}

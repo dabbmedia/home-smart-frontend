@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Home Smart Video Camera{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+  <div id="view-index">
+    <section class="sensor">
+      <div><img src="{{ url_for('home_smart_device.video_feed') }}"></div>
+    </section>
+  </div>
+{% endblock %}

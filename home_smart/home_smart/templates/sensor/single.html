@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Sensors{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+  <div id="view-index">
+    
+    <br>
+    
+    <section class="sensor">
+      {% if sensor['type'] == 'Video' %}
+      <div><img src="{{ url_for('sensor.video_feed', id=sensor['id']) }}"></div>
+      {% endif %}
+      <div><img src="http://10.0.0.100/video-feed"></div>
+      <h1><a href="{{ url_for('sensor.update', id=sensor['id']) }}">{{ sensor['name'] }}</a></h1>
+      <input type="hidden" name="id" id="id" value="{{ sensor['id'] }}">
+      
+      <p class="sensor-type">{{ sensor['type'] }}</p>
+      
+      <p class="sensor-name">{{ sensor['name'] }}</p>
+      
+      <p class="sensor-description">{{ sensor['description'] }}</p>
+              
+      <div class="sensor-created">Created on {{ sensor['created'].strftime('%Y-%m-%d') }}</div>
+      
+      <div id="result"></div>
+    </section>
+  </div>
+{% endblock %}
