@@ -1,6 +1,7 @@
 import os, sys
 from flask import Flask
 from home_smart.controllers import home_smart, db, location, floor, room, device, sensor, sensor_event, actuator, actuator_event, network, video
+from home_smart.modules.model import Model
 from home_smart.modules.camera.open_cv_camera import OpenCvCamera
 # from home_smart.modules.camera.ffmpeg_camera import FfmpegCamera
 

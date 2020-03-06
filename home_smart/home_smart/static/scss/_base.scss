@@ -19,11 +19,24 @@ html {
                 text-decoration: none;
             }
         }
-        a { color: #eee; }
+        h2 {
+            font-size: 0.8rem;
+            margin-top: 1.2rem;
+        }
+        h3 {
+            font-size: 0.7rem;
+        }
+
+        a { text-decoration: none; color: #eee; }
+        
         hr { border: none; border-top: 1px solid lightgray; }
 
         /* Form elements */
-        label { font-weight: bold; margin-bottom: 0.5em; }
+        label {
+            font-weight: bold;
+            margin-top: 0.25em;
+            margin-bottom: 0.5em;
+        }
         input[type=button], input[type=submit] {
             /*
             -webkit-appearance: none;

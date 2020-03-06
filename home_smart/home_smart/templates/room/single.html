@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1><a href="{{ url_for('floor.index') }}">Floors</a>&nbsp;&gt;&nbsp;{% block title %}Floor{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <div class="single-details">
+    <h2>Name</h2>
+    <p>{{ floor['name'] }}</p>
+    <h2>Description</h2>
+    <p id="description">{{ request.form['description'] or floor['description'] }}</p>
+  </div>
+  <div class="single-data">
+    <h3>Rooms</h3>
+    <ul class="floor-rooms">
+      {% for room in floor['rooms'] %}
+      <li data-id="{{ room['id'] }}">
+        <p>{{ room['name'] }}</p>
+        <h4>Devices</h4>
+        <ul class="room-devices">
+          {% for device in room['devices'] %}
+          <li data-id="{{ device['id'] }}">
+            {{ device['name'] }}
+            <h5>Sensors</h5>
+            <ul class="device-sensors">
+            {% for sensor in device['sensors'] %}
+            <li><a href="{{ url_for('sensor.single', id=sensor['id']) }}">{{ sensor['name'] }}</a></li>
+            {% endfor %}
+            </ul>
+            <h5>Actuators</h5>
+            <ul class="device-actuators">
+            {% for actuator in device['actuators'] %}
+            <li>{{ actuator['name'] }}</li>
+            {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock %}

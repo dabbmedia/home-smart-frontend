@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Add Floor{% endblock %}</h1>
+  <h1>{% block title %}Add Network{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -10,6 +10,18 @@
     <input name="name" id="name" value="{{ request.form['name'] }}" required>
     <label for="description">Description</label>
     <input name="description" id="description" value="{{ request.form['description'] }}">
+    <label for="location_id">Location</label>
+    <select name="location_id">
+      {% for location in locations %}
+      <option value="{{ location['id'] }}"{% if location['id']==request.form['location_id'] %} selected="selected"{% endif %}>{{ location['name'] }}</option>
+      {% endfor %}
+    </select>
+    <label for="description">Public Address</label>
+    <input name="public_address" id="public_address" value="{{ request.form['public_address'] }}">
+    <label for="description">Gateway Address</label>
+    <input name="gateway_address" id="gateway_address" value="{{ request.form['gateway_address'] }}">
+    <label for="description">Subnet Address</label>
+    <input name="subnet_address" id="subnet_address" value="{{ request.form['subnet_address'] }}">
     <input type="submit" value="Save">
   </form>
 {% endblock %}

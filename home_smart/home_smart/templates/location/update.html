@@ -5,34 +5,39 @@
 {% endblock %}
 
 {% block content %}
-  <section class="floors">
-    <h2>Floors</h2>
-    <ul class="location-floors">
-      {% for location in location %}
-      <li data-id="{{ location['id'] }}">
-        {{ location['floor_name'] }}
-        <ul class="floor-rooms">
-          <li data-id="{{ location['id'] }}">
-            <h4>Devices</h4>
-            <ul class="room-devices">
-              <li data-id="{{ location['id'] }}">{{ location['device_name'] }}</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-
   <form method="post">
     <label for="name">Name</label>
     <input name="name" id="name" value="{{ request.form['name'] or location['name'] }}" required>
     <label for="description">Description</label>
-    <textarea name="description" id="description">{{ request.form['location_description'] or location['location_description'] }}</textarea>
+    <textarea name="description" id="description">{{ request.form['description'] or location['description'] }}</textarea>
     <input type="submit" value="Update">
   </form>
   
   <form action="{{ url_for('location.delete', id=location['id']) }}" method="post">
     <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
   </form>
+
+  <section class="floors">
+    <h2>Floors</h2>
+    <ul class="location-floors">
+      {% for floor in location['floors'] %}
+      <li data-id="{{ floor['id'] }}">
+        <a href="{{ url_for('floor.update', id=floor['id']) }}">{{ floor['name'] }}</a>
+        <ul class="floor-rooms">
+          {% for room in floor['rooms'] %}
+          <li data-id="{{ room['id'] }}">
+            {{ room['name']}}
+            <h4>Devices</h4>
+            <ul class="room-devices">
+              {% for device in room['devices'] %}
+              <li data-id="{{ device['id'] }}">{{ device['name'] }}</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
 {% endblock %}

@@ -1,27 +1,15 @@
-# import cv2 as cv
 from flask import (
     Blueprint, jsonify, redirect, render_template, request, url_for, Flask
 )
-from pprint import pprint
-from psycopg2.extras import RealDictCursor
-
-from .db import get_db
+from home_smart.modules.model import Model
 
 bp = Blueprint('room', __name__)
 app = Flask(__name__)
 
 @bp.route('/room')
 def index():
-    db = get_db()
-    db_cur = db.cursor(cursor_factory=RealDictCursor)
-    db_cur.execute(
-        'SELECT id, name, description, created FROM room '
-        ' ORDER BY name ASC'
-    )
-    rooms = db_cur.fetchall()
-    # app.logger.info('room name: %s', rooms)
-    # return pprint(rooms)
-    # app.logger.info('room name: %s', rooms.description)
+    model_room = Model('room')
+    rooms = model_room.select_all()
     return render_template('room/index.html', rooms=rooms)
 
 @bp.route('/room/create', methods=('GET', 'POST'))
@@ -29,55 +17,51 @@ def create():
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
+        floor_id = request.form['floor_id']
         error = None
 
         if not name:
             error = 'Name is required.'
         if not description:
             error = 'Description is required.'
+        if not floor_id:
+            error = 'Floor is required.'
 
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor(cursor_factory=RealDictCursor)
-            db_cur.execute(
-                'INSERT INTO room (name, description) VALUES (%s, %s)',
-                (name, description)
-            )
-            db.commit()
+            model_room = Model('room')
+            insert_id = model_room.insert({'name': name, 'description': description, 'floor_id': floor_id})
             return redirect(url_for('room.index'))
 
-    return render_template('room/create.html')
+    model_floor = Model('floor')
+    floors = model_floor.select_all()
+
+    return render_template('room/create.html', floors=floors)
 
 @bp.route('/room/<int:id>/update', methods=('GET', 'POST'))
 def update(id):
-    # robot_state = get_robot_state(id)
+    model_room = Model('room')
 
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
+        floor_id = request.form['floor_id']
         error = None
 
         if not name:
             error = 'Name is required.'
         if not description:
             error = 'Description is required.'
+        if not floor_id:
+            error = 'Floor is required.'
 
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor()
-            db_cur.execute(
-                'UPDATE room SET name = %s, description = %s'
-                ' WHERE id = %s',
-                (name, description, id)
-            )
-            db.commit()
-            return redirect(url_for('room.index'))
+            model_room.update({'name': name, 'description': description, 'floor_id': floor_id, 'id': id})
 
-    room = get_room(id)
+    room = model_room.select_by_id(id)
 
     return render_template('room/update.html', room=room)
 
@@ -91,15 +75,8 @@ def delete(id):
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor()
-            db_cur.execute(
-                'DELETE FROM room WHERE id = %s LIMIT 1',
-                (id,)
-            )
-            db.commit()
-
-    room = get_room(id)
+            model_room = Model('room')
+            model_room.delete({'id': id})
 
     return redirect(url_for('room.index'))
 

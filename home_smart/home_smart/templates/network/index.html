@@ -7,16 +7,16 @@
   <div id="view-index">
     
     <br>
-    {% for floor in floors %}
-      <section class="floor">
-        <h1><a href="{{ url_for('network.update', id=floor['id']) }}">{{ floor['name'] }}</a></h1>
-        <input type="hidden" name="id" id="id" value="{{ floor['id'] }}">
+    {% for network in networks %}
+      <section class="network">
+        <h1><a href="{{ url_for('network.update', id=network['id']) }}">{{ network['name'] }}</a></h1>
+        <input type="hidden" name="id" id="id" value="{{ network['id'] }}">
         
-        <p class="floor-description">{{ floor['description'] }}</p>
+        <p class="network-description">{{ network['description'] }}</p>
         
-        <div class="floor-name">{{ floor['name'] }}</div>
+        <div class="network-name">{{ network['name'] }}</div>
                 
-        <div class="floor-created">Created on {{ floor['created'].strftime('%Y-%m-%d') }}</div>
+        <div class="network-created">Created on {{ network['created'].strftime('%Y-%m-%d') }}</div>
         
         {% if not loop.last %}
         <hr>
@@ -24,7 +24,7 @@
         <div id="result"></div>
       </section>
     {% endfor %}
-    <section class="floor">
+    <section class="network">
       <div class="action-add"><a href="{{ url_for('network.create') }}">+</a></div>
       <div class="action-label"><a href="{{ url_for('network.create') }}">Add</a></div>
     </section>

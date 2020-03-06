@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1><a href="{{ url_for('device.index') }}">Devices</a>&nbsp;&gt;&nbsp;{% block title %}Device{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <div class="single-details">
+    <h2>Name</h2>
+    <p>{{ device['name'] }}</p>
+    <h2>Description</h2>
+    <p id="description">{{ request.form['description'] or device['description'] }}</p>
+  </div>
+  <div class="single-data">
+    <h3>Sensors</h3>
+    <ul class="device-rooms">
+      {% for sensor in device['sensors'] %}
+      <li data-id="{{ sensor['id'] }}">
+        <p>{{ sensor['name'] }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock %}

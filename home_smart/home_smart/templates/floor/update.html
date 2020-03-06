@@ -8,12 +8,13 @@
 
   <form method="post">
     <label for="name">Name</label>
-    <input name="name" id="name" value="{{ request.form['name'] or location['name'] }}" required>
+    <input name="name" id="name" value="{{ request.form['name'] or floor['name'] }}" required>
     <label for="description">Description</label>
-    <textarea name="description" id="description">{{ request.form['description'] or location['description'] }}</textarea>
+    <textarea name="description" id="description">{{ request.form['description'] or floor['description'] }}</textarea>
+    <input type="hidden" name="location_id" value="{{ floor['location_id'] }}">
     <input type="submit" value="Update">
   </form>
-  <form action="{{ url_for('floor.delete', id=location['id']) }}" method="post">
+  <form action="{{ url_for('floor.delete', id=floor['id']) }}" method="post">
     <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
   </form>
 {% endblock %}

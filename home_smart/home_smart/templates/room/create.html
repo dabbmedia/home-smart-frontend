@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Add Floor{% endblock %}</h1>
+  <h1>{% block title %}Add Room{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -10,6 +10,12 @@
     <input name="name" id="name" value="{{ request.form['name'] }}" required>
     <label for="description">Description</label>
     <input name="description" id="description" value="{{ request.form['description'] }}">
+    <label for="location_id">Floor</label>
+    <select name="floor_id">
+    	{% for floor in floors %}
+    	<option value="{{ floor['id'] }}">{{ floor['name'] }}</option>
+    	{% endfor %}
+    </select>
     <input type="submit" value="Save">
   </form>
 {% endblock %}

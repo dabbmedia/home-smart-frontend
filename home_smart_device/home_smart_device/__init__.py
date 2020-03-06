@@ -1,5 +1,6 @@
 import os, sys
 from flask import Flask
+print(sys.path)
 from home_smart_device.controllers import home_smart_device
 from home_smart_device.modules.camera.open_cv_camera import OpenCvCamera
 # from home_smart_device.modules.camera.ffmpeg_camera import FfmpegCamera

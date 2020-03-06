@@ -8,12 +8,24 @@
 
   <form method="post">
     <label for="name">Name</label>
-    <input name="name" id="name" value="{{ request.form['name'] or location['name'] }}" required>
+    <input name="name" id="name" value="{{ request.form['name'] or network['name'] }}" required>
     <label for="description">Description</label>
-    <textarea name="description" id="description">{{ request.form['description'] or location['description'] }}</textarea>
+    <textarea name="description" id="description">{{ request.form['description'] or network['description'] }}</textarea>
+    <label for="location_id">Location</label>
+    <select name="location_id">
+      {% for location in network.locations %}
+      <option value="{{ location['id'] }}"{% if location['id']==network['location_id'] %} selected="selected"{% endif %}>{{ location['name'] }}</option>
+      {% endfor %}
+    </select>
+    <label for="description">Public Address</label>
+    <input name="public_address" id="public_address" value="{{ request.form['public_address'] or network['public_address'] }}">
+    <label for="description">Gateway Address</label>
+    <input name="gateway_address" id="gateway_address" value="{{ request.form['gateway_address'] or network['gateway_address'] }}">
+    <label for="description">Subnet Address</label>
+    <input name="subnet_address" id="subnet_address" value="{{ request.form['subnet_address'] or network['subnet_address'] }}">
     <input type="submit" value="Update">
   </form>
-  <form action="{{ url_for('network.delete', id=location['id']) }}" method="post">
+  <form action="{{ url_for('network.delete', id=network['id']) }}" method="post">
     <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
   </form>
 {% endblock %}

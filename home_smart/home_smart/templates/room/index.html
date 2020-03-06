@@ -7,16 +7,16 @@
   <div id="view-index">
     
     <br>
-    {% for floor in floors %}
-      <section class="floor">
-        <h1><a href="{{ url_for('room.update', id=floor['id']) }}">{{ floor['name'] }}</a></h1>
-        <input type="hidden" name="id" id="id" value="{{ floor['id'] }}">
+    {% for room in rooms %}
+      <section class="room">
+        <h1><a href="{{ url_for('room.update', id=room['id']) }}">{{ room['name'] }}</a></h1>
+        <input type="hidden" name="id" id="id" value="{{ room['id'] }}">
         
-        <p class="floor-description">{{ floor['description'] }}</p>
+        <p class="room-description">{{ room['description'] }}</p>
         
-        <div class="floor-name">{{ floor['name'] }}</div>
+        <div class="room-name">{{ room['name'] }}</div>
                 
-        <div class="floor-created">Created on {{ floor['created'].strftime('%Y-%m-%d') }}</div>
+        <div class="room-created">Created on {{ room['created'].strftime('%Y-%m-%d') }}</div>
         
         {% if not loop.last %}
         <hr>
@@ -24,7 +24,7 @@
         <div id="result"></div>
       </section>
     {% endfor %}
-    <section class="floor">
+    <section class="room">
       <div class="action-add"><a href="{{ url_for('room.create') }}">+</a></div>
       <div class="action-label"><a href="{{ url_for('room.create') }}">Add</a></div>
     </section>

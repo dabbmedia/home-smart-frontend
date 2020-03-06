@@ -2,31 +2,21 @@
 # ffmpeg -f video4linux2 -r 12 -i /dev/video0 -vcodec libx264 -r 12 -pix_fmt yuv420p /var/www/home_smart/home_smart/tmp/out.mp4
 import sys, time
 from datetime import datetime
-import numpy as np
-import cv2 as cv
+# import numpy as np
+# import cv2 as cv
 from flask import (
     Blueprint, jsonify, redirect, render_template, request, url_for, Response, Flask
 )
-from pprint import pprint
-from psycopg2.extras import RealDictCursor
-from .db import get_db
 import home_smart
+from home_smart.modules.model import Model
 
 bp = Blueprint('sensor', __name__)
 app = Flask(__name__)
 
 @bp.route('/sensor')
 def index():
-    db = get_db()
-    db_cur = db.cursor(cursor_factory=RealDictCursor)
-    db_cur.execute(
-        'SELECT id, name, description, created FROM sensor '
-        ' ORDER BY name ASC'
-    )
-    sensors = db_cur.fetchall()
-    # app.logger.info('sensor name: %s', sensors)
-    # return pprint(sensors)
-    # app.logger.info('sensor name: %s', sensors.description)
+    model_sensor = Model('sensor')
+    sensors = model_sensor.select_all()
     return render_template('sensor/index.html', sensors=sensors)
 
 @bp.route('/sensor/create', methods=('GET', 'POST'))
@@ -57,7 +47,7 @@ def create():
 
 @bp.route('/sensor/<int:id>/update', methods=('GET', 'POST'))
 def update(id):
-    # robot_state = get_robot_state(id)
+    model_sensor = Model('sensor')
 
     if request.method == 'POST':
         name = request.form['name']
@@ -75,17 +65,10 @@ def update(id):
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor()
-            db_cur.execute(
-                'UPDATE sensor SET name = %s, description = %s, device_id = %s '
-                ' WHERE id = %s',
-                (name, description, device_id, id)
-            )
-            db.commit()
+            sensors = model_sensor.update({'name': name, 'description': description, 'device_id': device_id, 'id': id})
             return redirect(url_for('sensor.index'))
 
-    sensor = get_sensor(id)
+    sensor = model_sensor.select_by_id(id)
 
     return render_template('sensor/update.html', sensor=sensor)
 
@@ -157,15 +140,8 @@ def delete(id):
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor()
-            db_cur.execute(
-                'DELETE FROM sensor WHERE id = %s LIMIT 1',
-                (id,)
-            )
-            db.commit()
-
-    sensor = get_sensor(id)
+            model_sensor = Model('sensor')
+            model_sensor.delete(id)
 
     return redirect(url_for('sensor.index'))
 

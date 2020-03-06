@@ -18,13 +18,12 @@ html {
             section {
                 display: inline-block;
                 max-width: 22%;
-                margin: 2rem 2%;
+                margin: 2rem 1%;
 
                 .video-frame {
-                    height: 240px;
-
                     img {
-                        height: 240px;
+                        width: 96%;
+                        padding: 2px 0;
                     }
                 }
 

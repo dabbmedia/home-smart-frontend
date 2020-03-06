@@ -50,6 +50,11 @@ def create():
 
     return render_template('device/create.html')
 
+@bp.route('/device/<int:id>', methods=('GET', 'POST'))
+def single(id):
+    device = get_device(id)
+    return render_template('device/single.html', device=device)
+
 @bp.route('/device/<int:id>/update', methods=('GET', 'POST'))
 def update(id):
     if request.method == 'POST':
@@ -107,13 +112,17 @@ def delete(id):
 def get_device(id):
     db = get_db()
     db_cur = db.cursor(cursor_factory=RealDictCursor)
-    db_cur.execute(
-        'SELECT id, name, description, address, created'
-        ' FROM device'
-        ' WHERE id = %s'
-        ' ORDER BY name ASC',
+    sql = db_cur.mogrify(
+        'SELECT d.id AS id, d.room_id AS room_id, d.name AS name, d.description AS description, d.address AS address, d.created AS created, ARRAY_AGG(s.*) AS sensors'
+        ' FROM device d'
+        ' LEFT OUTER JOIN sensor s ON d.id = s.device_id'
+        ' WHERE d.id = %s'
+        ' GROUP BY d.id'
+        ' ORDER BY d.name ASC',
         (id,)
     )
+    print(sql)
+    db_cur.execute(sql)
     device = db_cur.fetchone()
     if device is None:
         abort(404, "device id {0} doesn't exist.".format(id))

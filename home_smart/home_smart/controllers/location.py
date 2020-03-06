@@ -96,9 +96,9 @@ def update(id):
             db.commit()
             # return redirect(url_for('location.update', id=location['id']))
 
-    location_floors = get_location(id)
+    location = get_location(id)
 
-    return render_template('location/update.html', location_floors=location_floors)
+    return render_template('location/update.html', location=location)
 
 @bp.route('/location/<int:id>/delete', methods=('GET', 'POST'))
 def delete(id):
