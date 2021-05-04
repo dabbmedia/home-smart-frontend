@@ -5,6 +5,7 @@
 /*or*/
 /*sass --watch :compressed home_smart/home_smart/static/scss/style.scss:home_smart/home_smart/static/style.css */
 @import '_variables';
+@import '_functions';
 @import '_base';
 @import '_nav';
 @import '_content';

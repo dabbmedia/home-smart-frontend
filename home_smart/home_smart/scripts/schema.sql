@@ -62,10 +62,13 @@ CREATE TABLE device (
   room_id BIGSERIAL NOT NULL REFERENCES room(id),
   name text NOT NULL,
   description text NULL,
+  address text NULL,
   created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE device ADD COLUMN address inet;
+-- ALTER TABLE device ADD COLUMN address inet;
+-- ALTER TABLE device DROP COLUMN IF EXISTS address;
+-- ALTER TABLE device ADD COLUMN address text;
 
 INSERT INTO device (id, room_id, name, description) VALUES (1, 1, 'Raspberry Pi 4', 'Connected to TV.', '127.0.0.1');
 INSERT INTO device (id, room_id, name, description) VALUES (2, 1, 'Raspberry Pi Zero', 'In 3D printed case.', '10.0.0.100');

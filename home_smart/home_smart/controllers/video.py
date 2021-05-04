@@ -28,7 +28,7 @@ def index():
 
     cameras = db_cur.fetchall()
 
-    for camera in cameras:
-        print(str(camera['sensor_id']) + ': ' + camera['sensor_name'] + ' - device - ' + str(camera['device_id']) + ': ' + camera['device_name'])
+    # for camera in cameras:
+    #     print(str(camera['sensor_id']) + ': ' + camera['sensor_name'] + ' - device - ' + str(camera['device_id']) + ': ' + camera['device_name'])
     
     return render_template('video/index.html', cameras=cameras)

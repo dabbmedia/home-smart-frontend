@@ -1,0 +1,14 @@
+# /etc/systemd/system/home_smart.service
+[Unit]
+Description=uWSGI instance to serve myproject
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/var/www/home_smart
+# Environment="PATH=/home/sammy/myproject/myprojectenv/bin"
+ExecStart=/usr/bin/uwsgi --ini /var/www/home_smart/home_smart/home_smart.ini
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,24 @@
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius + 'px';
+     -moz-border-radius: $radius + 'px';
+      -ms-border-radius: $radius + 'px';
+       -o-border-radius: $radius + 'px';
+          border-radius: $radius + 'px';
+  -webkit-border-radius: px-to-rem($radius);
+     -moz-border-radius: px-to-rem($radius);
+      -ms-border-radius: px-to-rem($radius);
+       -o-border-radius: px-to-rem($radius);
+          border-radius: px-to-rem($radius);
+}
+
+@mixin border-radius-top($radius) {
+  -webkit-border-radius: $radius $radius 0 0;
+     -moz-border-radius: $radius $radius 0 0;
+      -ms-border-radius: $radius $radius 0 0;
+       -o-border-radius: $radius $radius 0 0;
+          border-radius: $radius $radius 0 0;
+}
+
+@function px-to-rem($pixels) {
+  @return ( $pixels / $base-font-size ) + rem;
+}

@@ -1,19 +1,16 @@
-# import cv2 as cv
 from flask import (
     Blueprint, jsonify, redirect, render_template, request, url_for, json, Flask
 )
 
-# from .db import get_db
-
-from home_smart.modules.model import Model
+from modules.floor import Floor
 
 bp = Blueprint('floor', __name__)
 app = Flask(__name__)
 
 @bp.route('/floor')
 def index():
-    model_floor = Model('floor')
-    floors = model_floor.select_all()
+    floor = Floor()
+    floors = floor.get_floors()
     return render_template('floor/index.html', floors=floors)
 
 @bp.route('/floor/<int:id>', methods=('GET', 'POST'))
@@ -53,7 +50,7 @@ def create():
 
 @bp.route('/floor/<int:id>/update', methods=('GET', 'POST'))
 def update(id):
-    model_floor = Model('floor')
+    floor = Floor()
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
@@ -70,14 +67,15 @@ def update(id):
         if error is not None:
             flash(error)
         else:
-            model_floor.update({'name': name, 'description': description, 'location_id': location_id, 'id': id})
+            floor.update({'name': name, 'description': description, 'location_id': location_id, 'id': id})
 
-    floor = model_floor.select_by_id(id)
+    floor = floor.get_floor(id)
 
     return render_template('floor/update.html', floor=floor)
 
 @bp.route('/floor/location/<int:id>/', methods=('GET', 'POST'))
 def get_by_location_id(id):
+    model_floor = Model('floor')
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
@@ -101,7 +99,7 @@ def get_by_location_id(id):
             db.commit()
             return redirect(url_for('floor.index'))
 
-    floor = get_floor(id)
+    floor = model_floor.select_by_id(id)
 
     return render_template('floor/update.html', floor=floor)
 
@@ -115,14 +113,7 @@ def delete(id):
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor()
-            db_cur.execute(
-                'DELETE FROM floor WHERE id = %s LIMIT 1',
-                (id,)
-            )
-            db.commit()
-
-    floor = get_floor(id)
+            floor = Floor()
+            floor.delete(id)
 
     return redirect(url_for('floor.index'))

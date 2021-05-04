@@ -1,0 +1,3 @@
+/Users/brent/Projects/Sites/home_smart/smart_app/flask/home_smart_device/home_smart_detect/home_smart_detect/CMakeFiles/rebuild_cache.dir
+/Users/brent/Projects/Sites/home_smart/smart_app/flask/home_smart_device/home_smart_detect/home_smart_detect/CMakeFiles/edit_cache.dir
+/Users/brent/Projects/Sites/home_smart/smart_app/flask/home_smart_device/home_smart_detect/home_smart_detect/CMakeFiles/HomeSmartDetect.dir

@@ -1,68 +1,67 @@
-# import cv2 as cv
 from flask import (
     Blueprint, jsonify, redirect, render_template, request, url_for, Flask
 )
-from pprint import pprint
 from psycopg2.extras import RealDictCursor
 
-from .db import get_db
+from  modules.model import Model
 
 bp = Blueprint('device', __name__)
 app = Flask(__name__)
 
 @bp.route('/device')
 def index():
-    db = get_db()
-    db_cur = db.cursor(cursor_factory=RealDictCursor)
-    db_cur.execute(
-        'SELECT id, name, description, address, created FROM device '
-        ' ORDER BY name ASC'
-    )
-    devices = db_cur.fetchall()
-    # app.logger.info('device name: %s', devices)
-    # return pprint(devices)
-    # app.logger.info('device name: %s', devices.description)
+    model_device = Model('device')
+    devices = model_device.select_all()
     return render_template('device/index.html', devices=devices)
 
 @bp.route('/device/create', methods=('GET', 'POST'))
 def create():
     if request.method == 'POST':
-        name = request.form['name']
-        description = request.form['description']
-        error = None
-
-        if not name:
-            error = 'Name is required.'
-        if not description:
-            error = 'Description is required.'
-
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db_cur = db.cursor(cursor_factory=RealDictCursor)
-            db_cur.execute(
-                'INSERT INTO device (name, description) VALUES (%s, %s)',
-                (name, description)
-            )
-            db.commit()
-            return redirect(url_for('device.index'))
-
-    return render_template('device/create.html')
-
-@bp.route('/device/<int:id>', methods=('GET', 'POST'))
-def single(id):
-    device = get_device(id)
-    return render_template('device/single.html', device=device)
-
-@bp.route('/device/<int:id>/update', methods=('GET', 'POST'))
-def update(id):
-    if request.method == 'POST':
+        room_id = request.form['room_id']
         name = request.form['name']
         description = request.form['description']
         address = request.form['address']
         error = None
 
+        if not room_id:
+            error = 'Room ID is required.'
+        if not name:
+            error = 'Name is required.'
+        if not description:
+            error = 'Description is required.'
+        if not address:
+            error = 'IP Address/URL is required.'
+        if error is not None:
+            flash(error)
+        else:
+            model_device = Model('device')
+            insert_id = model_device.insert({'room_id': room_id, 'name': name, 'description': description, 'address': address})
+            return redirect(url_for('device.index'))
+    
+    model_room = Model('room')
+    rooms = model_room.select_all()
+    # app.logger.info('/device/create rooms retrieved')
+
+    return render_template('device/create.html', rooms=rooms)
+
+@bp.route('/device/<int:id>', methods=('GET', 'POST'))
+def single(id):
+    model_device = Model('device')
+    device = model_device.select_by_id(id)
+    return render_template('device/single.html', device=device)
+
+@bp.route('/device/<int:id>/update', methods=('GET', 'POST'))
+def update(id):
+    model_device = Model('device')
+    if request.method == 'POST':
+        room_id = request.form['room_id']
+        name = request.form['name']
+        description = request.form['description']
+        address = request.form['address']
+        error = None
+
+        if not room_id:
+            error = 'Room ID is required.'
         if not name:
             error = 'Name is required.'
         if not description:
@@ -73,17 +72,10 @@ def update(id):
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor()
-            db_cur.execute(
-                'UPDATE device SET name = %s, description = %s, address = %s'
-                ' WHERE id = %s',
-                (name, description, address, id)
-            )
-            db.commit()
+            model_device.update({'room_id': room_id, 'name': name, 'description': description, 'address': address, 'id': id})
             return redirect(url_for('device.index'))
 
-    device = get_device(id)
+    device = model_device.select_by_id(id)
 
     return render_template('device/update.html', device=device)
 
@@ -97,34 +89,7 @@ def delete(id):
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db_cur = db.cursor()
-            db_cur.execute(
-                'DELETE FROM device WHERE id = %s LIMIT 1',
-                (id,)
-            )
-            db.commit()
-
-    device = get_device(id)
+            model_device = Model('device')
+            model_device.delete(id)
 
     return redirect(url_for('device.index'))
-
-def get_device(id):
-    db = get_db()
-    db_cur = db.cursor(cursor_factory=RealDictCursor)
-    sql = db_cur.mogrify(
-        'SELECT d.id AS id, d.room_id AS room_id, d.name AS name, d.description AS description, d.address AS address, d.created AS created, ARRAY_AGG(s.*) AS sensors'
-        ' FROM device d'
-        ' LEFT OUTER JOIN sensor s ON d.id = s.device_id'
-        ' WHERE d.id = %s'
-        ' GROUP BY d.id'
-        ' ORDER BY d.name ASC',
-        (id,)
-    )
-    print(sql)
-    db_cur.execute(sql)
-    device = db_cur.fetchone()
-    if device is None:
-        abort(404, "device id {0} doesn't exist.".format(id))
-
-    return device

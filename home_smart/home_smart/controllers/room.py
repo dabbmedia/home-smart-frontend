@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, jsonify, redirect, render_template, request, url_for, Flask
 )
-from home_smart.modules.model import Model
+from  modules.model import Model
 
 bp = Blueprint('room', __name__)
 app = Flask(__name__)

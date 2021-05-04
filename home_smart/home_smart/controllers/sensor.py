@@ -1,14 +1,16 @@
 # Grab video from camera with ffmpeg (plays in Quicktime)
 # ffmpeg -f video4linux2 -r 12 -i /dev/video0 -vcodec libx264 -r 12 -pix_fmt yuv420p /var/www/home_smart/home_smart/tmp/out.mp4
-import sys, time
-from datetime import datetime
+#   import sys, time
+# from datetime import datetime
 # import numpy as np
 # import cv2 as cv
 from flask import (
     Blueprint, jsonify, redirect, render_template, request, url_for, Response, Flask
 )
-import home_smart
-from home_smart.modules.model import Model
+# import home_smart
+from  modules.model import Model
+from psycopg2.extras import RealDictCursor
+from .db import get_db
 
 bp = Blueprint('sensor', __name__)
 app = Flask(__name__)
@@ -75,10 +77,12 @@ def update(id):
 @bp.route('/sensor/<int:id>', methods=('GET', 'POST'))
 def single(id):
     db = get_db()
+    db_cur = db.cursor(cursor_factory=RealDictCursor)
+    db_cur.execute('SELECT id, device_id, INITCAP(CAST(type AS text)) AS type, name, description, created FROM sensor WHERE id = %s', (id,))
 
-    with db:
-        db_cur = db.cursor(cursor_factory=RealDictCursor)
-        db_cur.execute('SELECT id, device_id, INITCAP(CAST(type AS text)) AS type, name, description, created FROM sensor WHERE id = %s', (id,))
+    # with db:
+    #     db_cur = db.cursor(cursor_factory=RealDictCursor)
+    #     db_cur.execute('SELECT id, device_id, INITCAP(CAST(type AS text)) AS type, name, description, created FROM sensor WHERE id = %s', (id,))
 
     sensor = db_cur.fetchone()
 
@@ -94,12 +98,12 @@ def gen(camera):
 
 @bp.route('/sensor/video-feed/<int:id>', methods=('GET', 'POST'))
 def sensor_video_feed(id):
-    return Response(gen(home_smart.OpenCvCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
-    # return Response(gen(home_smart.FfmpegCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen( OpenCvCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+    # return Response(gen( FfmpegCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @bp.route('/video-feed', methods=('GET', 'POST'))
 def video_feed():
-    return Response(gen(home_smart.OpenCvCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen( OpenCvCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 def capture_video(sensor_id):
     cap = cv.VideoCapture(0)

@@ -1,0 +1,16 @@
+# /etc/systemd/system/home_smart_device.service
+[Unit]
+Description=GStreamer app to stream internal/external video camera
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+# WorkingDirectory=/var/www/home_smart_device
+WorkingDirectory=/home/pi/home_smart_device
+# Environment="PATH=/home/sammy/myproject/myprojectenv/bin"
+# ExecStart=/var/www/home_smart_device/bin/home_smart_camera
+ExecStart=/home/pi/home_smart_device/home_smart_camera
+
+[Install]
+WantedBy=multi-user.target

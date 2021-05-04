@@ -8,7 +8,11 @@
     
     {% for camera in cameras %}
     <section class="camera">
-      <div class="video-frame"><img src="http://{{ camera['address'] }}/video-feed"></div>
+      <!-- <div class="video-frame"><img src="http://{{ camera['address'] }}/video-feed"></div> -->
+      <!-- width=640 height=480 -->
+      <video id="camera_{{ camera['sensor_id'] }}" class="video-frame" height="240px" autoplay playsinline>
+        <source src="{{ camera['address'] }}">
+      </video>
       
       <h1>{{ camera['device_name'] }}</h1>
       <input type="hidden" name="device_id" id="device_id" value="{{ camera['device_id'] }}">

@@ -17,7 +17,7 @@ html {
 
             section {
                 display: inline-block;
-                max-width: 22%;
+                max-width: 100%;
                 margin: 2rem 1%;
 
                 .video-frame {
@@ -47,6 +47,54 @@ html {
                   text-align: right; padding-left: 8px; width: 24px; border-width: 0; font-size: 14px; color: black; background-color: transparent;
                 }
               }
+        }
+    }
+}
+@media (max-width: $phone-width-max) {
+    html {
+        body {
+            /* Content */
+            .content {
+                section {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+}
+@media (min-width: $tablet-width-min) and (max-width: $tablet-width-max) {
+    html {
+        body {
+            /* Content */
+            .content {
+                section {
+                    max-width: 50%;
+                }
+            }
+        }
+    }
+}
+@media (min-width: $lapdesk-width-min) and (max-width: $lapdesk-width-max) {
+    html {
+        body {
+            /* Content */
+            .content {
+                section {
+                    max-width: 25%;
+                }
+            }
+        }
+    }
+}
+@media (min-width: $tv-width-min) {
+    html {
+        body {
+            /* Content */
+            .content {
+                section {
+                    max-width: 16%;
+                }
+            }
         }
     }
 }
