@@ -36,7 +36,7 @@ class OpenCvCamera(Camera):
                 if delta > 6000.0:
                     # event occurred
                     # print("motion may have occurred")
-                    img_name = "/var/www/home_smart/home_smart/tmp/motion_maybe_" + datetime.now().strftime("_%Y_%m_%d_%H_%M_%S") + ".jpg"
+                    img_name = "/var/www/home_smart_device/home_smart_device/tmp/motion_maybe_" + datetime.now().strftime("_%Y_%m_%d_%H_%M_%S") + ".jpg"
                     # result = cv2.imwrite(img_name, img)
                     p = Process(target=cv2.imwrite, args=(img_name,img))
                     p.start()
